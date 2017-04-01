@@ -47,6 +47,6 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
     console.log(result);
   });
 
-
+  /* MongoDB actually uses a pool of connections behind the scenes. It automatically opens and closes individual connections as needed. You should only close the pool with db.close when you're completely done with it. The cost of reopening it is greater than the cost of leaving it open. You'll notice we never close the connection inside of the Todo API project.*/
   // db.close();
 });

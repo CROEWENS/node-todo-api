@@ -19,6 +19,8 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
 
   console.log('major tom to ground mongodb');
 
+  // find is slechts een pointer en toArray gebriken we om data eruit te halen.
+
   // db.collection('Todos').find().toArray().then((docs) => {
   //   console.log(JSON.stringify(docs, undefined, 2));
   // }, (err) => {
@@ -43,11 +45,17 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //   console.log("Unable to fetch todo's", err);
   // });
 
-  db.collection('Users').find({name: 'Dries'}).toArray().then((docs) => {
-    console.log(JSON.stringify(docs, undefined, 2));
+  // db.collection('Users').find({name: 'Dries'}).toArray().then((docs) => {
+  //   console.log(JSON.stringify(docs, undefined, 2));
+  // }, (err) => {
+  //   console.log("dayum dawg", err);
+  // });
+
+  db.collection('Users').find({name: 'Drie2s'}).toArray().then((docs) => {
+    console.log(docs);
   }, (err) => {
-    console.log("dayum dawg", err);
+    console.log("eeej");
   });
 
-  // db.close();
+  db.close();
 });

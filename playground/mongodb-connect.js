@@ -2,6 +2,7 @@
 // const MongoClient = require('mongodb').MongoClient;
 // const {MongoClient} = require('mongodb'); // <- object destructering
 const {MongoClient, ObjectID} = require('mongodb'); // <- kunnen er meerdere maken nu
+// krijgden de specifieke packages met de naam mongoclient & objectID ZIE HIERONDER OBJECT DESTRUCTERING
 
 // // object destructering
 // // let's u pull out properties from an object, creating variables
@@ -35,9 +36,10 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   // }, (err, result) => {
   //   // passing err aswell to display object
   //   if (err) return console.log('Wooooops, unable to insert todo', err);
-  //
+  
   //   // result contains document that was inserted.
   //   console.log(JSON.stringify(result.ops, undefined, 2));
+  //   console.log(JSON.stringify(result.ops[0]._id.getTimestamp()))
   // });
 
   db.close();
