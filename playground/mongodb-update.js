@@ -29,22 +29,20 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //   */
   // });
 
-  db.collection('Users').findOneAndUpdate({
-    //find filter
-    _id: new ObjectID("58a71b5767e2b6c5a692017b")
+
+  db.collection('Todos').findOneAndUpdate({
+    _id: new ObjectID("58dfde97dfde050dd0fb4903")
   }, {
-    //update with
     $set : {
-      name: 'Sofie'
+      name: "Dries2"
     },
-    $inc : {
-      age: 1
+    $inc: {
+      age: 5
     }
   }, {
-    // options
     returnOriginal: false
-  }).then((result) => {
-    console.log(result);
+  }).then((docs) => {
+    console.log(JSON.stringify(docs.value, undefined, 2));
   });
 
   /* MongoDB actually uses a pool of connections behind the scenes. It automatically opens and closes individual connections as needed. You should only close the pool with db.close when you're completely done with it. The cost of reopening it is greater than the cost of leaving it open. You'll notice we never close the connection inside of the Todo API project.*/
