@@ -1,30 +1,36 @@
-var mongoose = require('mongoose');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-// we willen geen callbacks gebruiken, maar promises
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
 
-// // model
-// var Todo = mongoose.model('Todo', {
-//   text: {
-//     type: String,
-//     required: true,
-//     minLength: 1,
-//
-//     //removes any leading or trailing whitespace (begin en eind spaties)
-//     // zorgt ervoor dat ge dus niet gwn ' ' kunt ingeven bij minlength
-//     trim: true
-//   },
-//   completed: {
-//     type: Boolean,
-//     default: false
-//   },
-//   completedAt: {
-//     type: Number, // unix timestamp
-//     default: null
-//   }
-// });
-//
+// object destruturing
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
+
+
+var app = express();
+var port = process.env.port | 3000;
+
+// middleware 
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+  // console.log(req.body);
+  var todo = new Todo({
+    text: req.body.text
+  });
+  todo.save().then((result) => {
+    res.send(result);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+
+app.listen(port, () => {
+  console.log(`Started on port ${port}`);
+});
+
 // // todo
 // var taak = new Todo({
 //   text: "l2program",
@@ -40,21 +46,14 @@ mongoose.connect('mongodb://localhost:27017/TodoApp');
 //   console.log('Woops something went wrong!', err);
 // });
 
-var User = mongoose.model('User', {
-  email: {
-    type: String,
-    required: false,
-    minLength: 1,
-    trim: true
-  }
-});
 
-var gebruiker = new User({
-  email: 'driescroons@gmail.com'
-});
 
-gebruiker.save().then((user) => {
-  console.log(JSON.stringify(user, undefined, 2));
-}, (err) => {
-  console.log('error');
-});
+// var gebruiker = new User({
+//   email: 'driescroons@gmail.com'
+// });
+
+// gebruiker.save().then((user) => {
+//   console.log(JSON.stringify(user, undefined, 2));
+// }, (err) => {
+//   console.log('error');
+// });
