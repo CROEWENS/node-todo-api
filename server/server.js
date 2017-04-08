@@ -1,6 +1,7 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var {ObjectID} = require('mongodb');
+const _ = require('lodash');
+const express = require('express');
+const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 // object destruturing
 var {mongoose} = require('./db/mongoose');
@@ -72,15 +73,46 @@ app.delete('/todos/:id', (req, res) => {
     // error 
       // 400 with empty body
 
-  Todo.findByIdAndRemove(id).then((result) => {
-    if (!result) {
+  Todo.findByIdAndRemove(id).then((todo) => {
+    if (!todo) {
       res.status(404).send();
     }
 
-    res.send(result);
+    // res.send({todo: todo})
+    res.send({todo});
   }).catch((e) => {
     res.status(400).send();
   });
+});
+
+app.patch('/todos/:id', (req, res) => {
+  // get the _id
+  var id = req.params.id;
+
+  // picks properties off of object so that we don't get the full object given as a param.
+  // we do not want user to update anything they want. That's why we cherry pick text & completed.
+  var body = _.pick(req.body, ['text','completed']);
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completed = false;
+    // remove value from db? set to null.
+    body.completedAt = null;
+  }
+
+  Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();
+    }
+
+    return res.send({todo});
+  }).catch((e) => res.status(400).send());
+
 });
 
 app.listen(port, () => {
