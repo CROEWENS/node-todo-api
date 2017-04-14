@@ -10,7 +10,7 @@ var {User} = require('./models/user');
 
 
 var app = express();
-var port = process.env.port | 3000;
+const port = process.env.port | 3000;
 
 // middleware 
 app.use(bodyParser.json());
@@ -113,6 +113,19 @@ app.patch('/todos/:id', (req, res) => {
     return res.send({todo});
   }).catch((e) => res.status(400).send());
 
+});
+
+app.post('/users' , (req, res) => {
+  // users cannot access the tokens array
+  var body = _.pick(req.body, ['email', 'password']);
+
+  // creating user.
+  var user = new User(body);
+
+  // we can save user to database
+  user.save().then((user) => {
+    res.send(user);
+  }).catch((e) => res.status(400).send(e));
 });
 
 app.listen(port, () => {
